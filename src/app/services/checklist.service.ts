@@ -26,9 +26,6 @@ export class ChecklistService {
       if (checklists !== null) {
         this.checklists = checklists;
         this.checklists$.next(this.checklists);
-      } else {
-        // this.checklists = [];
-        // this.checklists$.next([]);
       }
 
       this.loaded = true;
