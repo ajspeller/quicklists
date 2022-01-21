@@ -13,15 +13,20 @@ import { ChecklistService } from './services/checklist.service';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private storage: Storage) {
+  constructor(
+    private checklistService: ChecklistService,
+    private storage: Storage
+  ) {}
+
+  ngOnInit() {
     this.initializeApp();
   }
 
-  async ngOnInit() {
-    await this.storage.create();
-  }
-
   async initializeApp() {
+    await this.storage.create();
+
+    await this.checklistService.load();
+
     SplashScreen.hide().catch((err) => {
       console.warn(`Ummm... Something went wrong with the SplashScreen`);
       console.warn(err);

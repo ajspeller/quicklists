@@ -12,7 +12,7 @@ import { ChecklistItem } from '../interfaces/checklist-item';
   providedIn: 'root',
 })
 export class ChecklistService {
-  private checkLists$: BehaviorSubject<Checklist[]> = new BehaviorSubject<
+  private checklists$: BehaviorSubject<Checklist[]> = new BehaviorSubject<
     Checklist[]
   >([]);
   private checklists: Checklist[] = [];
@@ -21,15 +21,26 @@ export class ChecklistService {
   constructor(private storage: Storage) {}
 
   async load(): Promise<void> {
-    return Promise.resolve();
+    if (!this.loaded) {
+      const checklists = await this.storage.get('checklists');
+      if (checklists !== null) {
+        this.checklists = checklists;
+        this.checklists$.next(this.checklists);
+      } else {
+        // this.checklists = [];
+        // this.checklists$.next([]);
+      }
+
+      this.loaded = true;
+    }
   }
 
   getChecklists(): Observable<Checklist[]> {
-    return this.checkLists$;
+    return this.checklists$;
   }
 
   getChecklist(checklistId: string): Observable<Checklist> {
-    return this.checkLists$.pipe(
+    return this.checklists$.pipe(
       map((checklists) =>
         checklists.find((checklist) => checklist.id === checklistId)
       )
@@ -89,7 +100,7 @@ export class ChecklistService {
       checklist.id === checklistId
         ? {
             ...checklist,
-            items: [...checklist.items.filter((item) => item.id === itemId)],
+            items: [...checklist.items.filter((item) => item.id !== itemId)],
           }
         : checklist
     );
@@ -151,8 +162,8 @@ export class ChecklistService {
   }
 
   save(): Promise<void> {
-    this.checkLists$.next(this.checklists);
-    return Promise.resolve();
+    this.checklists$.next(this.checklists);
+    return this.storage.set('checklists', this.checklists);
   }
 
   generateSlug(title: string): string {
