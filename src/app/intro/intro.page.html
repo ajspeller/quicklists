@@ -1,9 +1,27 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Intro</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-
+  <ion-slides pager="true">
+    <ion-slide>
+      <img src="assets/images/slide1.png" alt="Slide 1" />
+    </ion-slide>
+    <ion-slide>
+      <img src="assets/images/slide2.png" alt="Slide 2" />
+    </ion-slide>
+    <ion-slide>
+      <img src="assets/images/slide3.png" alt="Slide 3" />
+    </ion-slide>
+    <ion-slide>
+      <img src="assets/images/slide4.png" alt="Slide 4" />
+    </ion-slide>
+  </ion-slides>
 </ion-content>
+
+<ion-footer>
+  <ion-button
+    expand="full"
+    color="success"
+    routerLink="/"
+    routerDirection="forward"
+  >
+    Start Using Quicklists<ion-icon name="chevron-forward-online"></ion-icon>
+  </ion-button>
+</ion-footer>

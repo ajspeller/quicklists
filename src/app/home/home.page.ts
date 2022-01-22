@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
+import { Storage } from '@ionic/storage-angular';
+
 import {
   AlertController,
   IonContent,
@@ -24,7 +26,8 @@ export class HomePage implements OnInit {
   constructor(
     private checklistService: ChecklistService,
     private alertController: AlertController,
-    private navController: NavController
+    private navController: NavController,
+    private storage: Storage
   ) {}
 
   ngOnInit(): void {
@@ -36,6 +39,13 @@ export class HomePage implements OnInit {
   }
 
   async addChecklist(): Promise<void> {
+    const introPreviouslyShown = await this.storage.get('introShown');
+
+    if (introPreviouslyShown === null) {
+      this.storage.set('introShown', true);
+      this.navController.navigateRoot('/intro');
+    }
+
     const alert = await this.alertController.create({
       header: 'New Checklist',
       message: 'Enter the name of your new checklist below:',
